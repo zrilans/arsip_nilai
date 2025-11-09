@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Akademik Digital - Rekap Nilai</title>
+    <style>
+        /* CSS: Gaya Modern dan Mewah */
+        :root {
+            --color-primary: #0A1931;
+            /* Deep Navy Blue */
+            --color-accent: #FFD700;
+            /* Gold Accent */
+            --color-text: #EAEAEA;
+            /* Light Gray Text */
+            --color-card: #1C2E4A;
+            /* Slightly Lighter Blue for Cards */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-primary);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 30px;
+            padding-bottom: 50px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid var(--color-accent);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            color: var(--color-accent);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+
+        /* --- Card Styles --- */
+        .card {
+            background-color: var(--color-card);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .card h2 {
+            color: var(--color-accent);
+            border-bottom: 2px solid var(--color-accent);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        /* --- New Full-Width Section Heading Card Style --- */
+        .section-heading-card {
+            background-color: #2D4059;
+            /* Warna yang sedikit berbeda */
+            color: var(--color-text);
+            padding: 20px 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 40px;
+            margin-bottom: 10px;
+            border-left: 8px solid var(--color-accent);
+            /* Aksen garis kiri */
+        }
+
+        .section-heading-card h2 {
+            color: var(--color-text);
+            font-size: 1.8em;
+            margin: 0;
+            border-bottom: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-heading-card h2 i {
+            color: var(--color-accent);
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        /* --- End New Style --- */
+
+
+        /* --- Semester Grid --- */
+        .semester-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            /* margin-top: 30px; -> Dihapus karena sudah ada margin di section-heading-card */
+            margin-bottom: 30px;
+            /* Jarak bawah untuk section berikutnya */
+        }
+
+        .semester-card h3 {
+            font-size: 1.8em;
+            margin-top: 0;
+            color: var(--color-accent);
+        }
+
+        .semester-card .ip-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            margin: 10px 0;
+        }
+
+        .semester-card .achievement-list {
+            margin-top: 15px;
+            padding-left: 20px;
+            border-left: 3px solid var(--color-accent);
+        }
+
+        .semester-card .achievement-list li {
+            margin-bottom: 5px;
+            list-style-type: none;
+            position: relative;
+        }
+
+        .semester-card .achievement-list li::before {
+            content: '醇';
+            position: absolute;
+            left: -20px;
+            color: var(--color-accent);
+        }
+
+        .details-button {
+            background-color: var(--color-accent);
+            color: var(--color-primary);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .details-button:hover {
+            background-color: #F8C300;
+        }
+
+        /* --- MODAL STYLES (New) --- */
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            z-index: 1000;
+            /* Superimpose on everything */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Dark semi-transparent background */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--color-card);
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        /* Modal Content untuk PDF */
+        .pdf-modal-content {
+            max-width: 90%;
+            /* Lebih lebar untuk PDF */
+            height: 90vh;
+            /* Hampir seluruh tinggi layar */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-content h2 {
+            color: var(--color-accent);
+            text-align: center;
+            border-bottom: 3px double var(--color-accent);
+        }
+
+        .close-btn {
+            color: var(--color-accent);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nilai-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+
+        .nilai-table th,
+        .nilai-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            /* Soft Gold line */
+        }
+
+        .nilai-table th {
+            background-color: #2D4059;
+            /* Slightly darker header */
+            color: var(--color-accent);
+        }
+
+        .nilai-table tr:hover {
+            background-color: #263859;
+            /* Subtle hover effect */
+        }
+
+        /* Gaya untuk PDF Viewer */
+        .pdf-viewer {
+            width: 100%;
+            flex-grow: 1;
+            /* Mengisi sisa ruang vertikal */
+            border: none;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .pdf-link-mobile {
+            text-align: center;
+            padding-top: 10px;
+        }
+
+        .pdf-link-mobile a {
+            color: var(--color-primary);
+            background-color: var(--color-accent);
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.3s;
+        }
+
+        /* Sembunyikan embed di mobile untuk user experience yang lebih baik */
+        @media (max-width: 768px) {
+            .pdf-viewer {
+                display: none;
+            }
+        }
+
+        /* Tampilkan link di mobile, sembunyikan di desktop */
+        @media (min-width: 769px) {
+            .pdf-link-mobile {
+                display: none;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* CSS Tambahan untuk Chart.js agar responsif */
+        .trend-card {
+            /* Atur tinggi minimum agar grafik terlihat */
+            height: 350px;
+            min-height: 300px;
+            max-height: 350px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .trend-card canvas {
+            flex-grow: 1;
+            width: 100% !important;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Portofolio Akademik Digital</h1>
+            <h2><i class="fas fa-user-circle"></i> Muhammad Nazril Ansrulloh</h2>
+            <p>Rekapitulasi Nilai & Prestasi Semester 1 - 5</p>
+        </header>
+
+        <div class="card summary-card">
+            <h2><i class="fas fa-chart-bar"></i> Ringkasan Global</h2>
+            <div style="display: flex; justify-content: space-around; text-align: center;">
+                <div>
+                    <h3>Rata-rata IP Global</h3>
+                    <p class="ip-value">85.7</p>
+                </div>
+                <div>
+                    <h3>Nilai Rata-rata Tertinggi</h3>
+                    <p class="ip-value">87.5</p>
+                </div>
+                <div>
+                    <h3>Total Prestasi</h3>
+                    <p class="ip-value">5</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card trend-card">
+            <h2><i class="fas fa-chart-line"></i> Trend Perkembangan Nilai</h2>
+            <canvas id="nilaiChart"></canvas>
+        </div>
+
+        <div class="section-heading-card">
+            <h2 style="color: var(--color-text); margin-bottom: 0;"><i class="fas fa-book"></i> Rekap Nilai Akademik
+                Semester</h2>
+        </div>
+
+        <div class="semester-grid">
+            <div class="card semester-card" data-semester="1">
+                <h3>Semester 1</h3>
+                <p>Rata-rata Nilai:</p>
+                <p class="ip-value">84.1</p>
+                <button class="details-button" onclick="showDetails(1)">Lihat Detail Nilai</button>
+            </div>
+
+            <div class="card semester-card" data-semester="2">
+                <h3>Semester 2</h3>
+                <p>Rata-rata Nilai:</p>
+                <p class="ip-value">85.0</p>
+                <button class="details-button" onclick="showDetails(2)">Lihat Detail Nilai</button>
+            </div>
+
+            <div class="card semester-card" data-semester="3">
+                <h3>Semester 3</h3>
+                <p>Rata-rata Nilai:</p>
+                <p class="ip-value">86.3</p>
+                <button class="details-button" onclick="showDetails(3)">Lihat Detail Nilai</button>
+            </div>
+
+            <div class="card semester-card" data-semester="4">
+                <h3>Semester 4</h3>
+                <p>Rata-rata Nilai:</p>
+                <p class="ip-value">87.5</p>
+                <button class="details-button" onclick="showDetails(4)">Lihat Detail Nilai</button>
+            </div>
+
+            <div class="card semester-card" data-semester="5">
+                <h3>Semester 5</h3>
+                <p>Rata-rata Nilai:</p>
+                <p class="ip-value">0</p>
+                <button class="details-button" onclick="showDetails(5)">Lihat Detail Nilai</button>
+            </div>
+        </div>
+
+        <div class="section-heading-card">
+            <h2 style="color: var(--color-text); margin-bottom: 0;"><i class="fas fa-medal"></i> Prestasi dan Sertifikat
+                Non-Akademik</h2>
+        </div>
+
+        <div class="semester-grid">
+            <div class="card" style="grid-column: span 1; border-top: 5px solid #FFD700;">
+                <h3 style="color: #FFD700; margin-bottom: 5px;"><i class="fas fa-trophy"></i> Juara 3 Bahasa Arab
+                    Nasional</h3>
+                <p style="font-size: 0.9em; opacity: 0.7;">Berhasil meraih juara ketiga dalam kompetisi Bahasa Arab
+                    bergengsi tingkat nasional pada event QUARTAL POINT. Diselenggarakan oleh Quartal Indonesia</p>
+                <button class="details-button"
+                    onclick="showCertificate('0160054-MUHAMMAD NAZRIL ANSRULLOH-MAN 1 BANDUNG-Bahasa Arab-POINT 2023.pdf', 'Sertifikat Juara 3 B. Arab Nasional')">
+                    Lihat Sertifikat
+                </button>
+            </div>
+
+            <div class="card" style="grid-column: span 1; border-top: 5px solid #FFD700;">
+                <h3 style="color: #FFD700; margin-bottom: 5px;"><i class="fas fa-trophy"></i> Juara 1 Olimpiade Bahasa
+                    Arab (7)</h3>
+                <p style="font-size: 0.9em; opacity: 0.7;">Berhasil meraih juara pertama dalam ajang Olimpiade Bahasa
+                    Arab ke-7 tingkat kabupaten. Diselenggarakan oleh F-MGMP Bahasa Arab Se-Indonesia</p>
+                <button class="details-button"
+                    onclick="showCertificate('Muhammad Nazril Ansrulloh MAN 1 Bandung Jawa Barat.pdf', 'Sertifikat Juara 1 OBA-7')">
+                    Lihat Sertifikat
+                </button>
+            </div>
+
+            <div class="card" style="grid-column: span 1; border-top: 5px solid #FFD700;">
+                <h3 style="color: #FFD700; margin-bottom: 5px;"><i class="fas fa-trophy"></i> Juara 1 Kaligrafi se -
+                    Bandung Raya</h3>
+                <p style="font-size: 0.9em; opacity: 0.7;">Berhasil meraih juara pertama dalam Lomba Kreativitas Santri,
+                    menunjukkan inovasi dan bakat di bidang Kaligrafi. Diselenggarakan oleh Pondok Pesantren Ash-Sholeh
+                </p>
+                <button class="details-button"
+                    onclick="showCertificate('Sertifikat Penghargaan LKS.pdf', 'Sertifikat Juara 1 Kaligrafi Bandung Raya')">
+                    Lihat Sertifikat
+                </button>
+            </div>
+
+            <div class="card" style="grid-column: span 1; border-top: 5px solid #FFD700;">
+                <h3 style="color: #FFD700; margin-bottom: 5px;"><i class="fas fa-trophy"></i> Juara 3 Kaligrafi se -
+                    Jawa Barat</h3>
+                <p style="font-size: 0.9em; opacity: 0.7;">Meraih juara ketiga dalam kompetisi kaligrafi tingkat Jawa
+                    Barat, menunjukkan keahlian seni kaligrafi islami. Diselenggarakan oleh UNINUS Bandung</p>
+                <button class="details-button"
+                    onclick="showCertificate('35.pdf', 'Sertifikat Juara 3 Kaligrafi Jabar')">
+                    Lihat Sertifikat
+                </button>
+            </div>
+
+            <div class="card" style="grid-column: span 1; border-top: 5px solid #FFD700;">
+                <h3 style="color: #FFD700; margin-bottom: 5px;"><i class="fas fa-trophy"></i> Juara 1 Olimpiade Bahasa
+                    Arab (8)</h3>
+                <p style="font-size: 0.9em; opacity: 0.7;">Berhasil meraih juara pertama dalam ajang Olimpiade Bahasa
+                    Arab ke-8 tingkat kabupaten. Diselenggarakan oleh F-MGMP Bahasa Arab Se-Indonesia</p>
+                <button class="details-button"
+                    onclick="showCertificate('Muhammad Nazril Ansrulloh_OBAK-1962_MAN 1 Bandung_Jawa Barat.pdf', 'Sertifikat Juara 1 OBA-8')">
+                    Lihat Sertifikat
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="nilaiModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('nilaiModal')">&times;</span>
+            <h2 id="modalTitle">Detail Nilai Semester X</h2>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <div id="pdfModal" class="modal">
+        <div class="modal-content pdf-modal-content">
+            <span class="close-btn" onclick="closeModal('pdfModal')">&times;</span>
+            <h2 id="pdfModalTitle">Sertifikat</h2>
+            <div id="pdfContainer" style="flex-grow: 1; display: flex; flex-direction: column;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA NILAI SIMULASI ---
+        const nilaiMataPelajaran = {
+
+            1: [
+                { mapel: 'Al Quran Hadis', nilai: 87 },
+                { mapel: 'Akidah Akhlak', nilai: 80 },
+                { mapel: 'Fikih', nilai: 82 },
+                { mapel: 'Sejarah Kebudayaan Islam', nilai: 86 },
+                { mapel: 'Bahasa Arab', nilai: 86 },
+                { mapel: 'Pendidikan Pancasila', nilai: 83 },
+                { mapel: 'Bahasa Indonesia', nilai: 82 },
+                { mapel: 'Matematika', nilai: 86 },
+                { mapel: 'Ilmu Pengetahuan Alam', nilai: 83 },
+                { mapel: 'Ilmu Pengetahuan Sosial', nilai: 85 },
+                { mapel: 'Bahasa Inggris', nilai: 86 },
+                { mapel: 'PJOK', nilai: 82 },
+                { mapel: 'Informatika', nilai: 84 },
+                { mapel: 'Seni Budaya', nilai: 88 },
+                { mapel: 'Tahfidz', nilai: 83 },
+                { mapel: 'Bahasa Sunda', nilai: 83 },
+                { mapel: 'Jumlah', nilai: 1346 },
+                { mapel: 'Rata-rata', nilai: 84.1 },
+            ],
+            2: [
+                { mapel: 'Al Quran Hadis', nilai: 83 },
+                { mapel: 'Akidah Akhlak', nilai: 83 },
+                { mapel: 'Fikih', nilai: 86 },
+                { mapel: 'Sejarah Kebudayaan Islam', nilai: 84 },
+                { mapel: 'Bahasa Arab', nilai: 87 },
+                { mapel: 'Pendidikan Pancasila', nilai: 87 },
+                { mapel: 'Bahasa Indonesia', nilai: 85 },
+                { mapel: 'Matematika', nilai: 81 },
+                { mapel: 'Ilmu Pengetahuan Alam', nilai: 85 },
+                { mapel: 'Ilmu Pengetahuan Sosial', nilai: 86 },
+                { mapel: 'Bahasa Inggris', nilai: 86 },
+                { mapel: 'PJOK', nilai: 83 },
+                { mapel: 'Informatika', nilai: 87 },
+                { mapel: 'Seni Budaya', nilai: 89 },
+                { mapel: 'Tahfidz', nilai: 84 },
+                { mapel: 'Bahasa Sunda', nilai: 84 },
+                { mapel: 'Jumlah', nilai: 1360 },
+                { mapel: 'Rata-rata', nilai: 85.0 },
+            ],
+            3: [
+                { mapel: 'Al Quran Hadis', nilai: 87 },
+                { mapel: 'Akidah Akhlak', nilai: 89 },
+                { mapel: 'Fikih', nilai: 83 },
+                { mapel: 'Sejarah Kebudayaan Islam', nilai: 82 },
+                { mapel: 'Bahasa Arab', nilai: 93 },
+                { mapel: 'Pendidikan Pancasila', nilai: 83 },
+                { mapel: 'Bahasa Indonesia', nilai: 88 },
+                { mapel: 'Matematika', nilai: 86 },
+                { mapel: 'Bahasa Inggris', nilai: 84 },
+                { mapel: 'PJOK', nilai: 84 },
+                { mapel: 'Sejarah', nilai: 83 },
+                { mapel: 'PKWU', nilai: 86 },
+                { mapel: 'Seni Budaya', nilai: 87 },
+                { mapel: 'Tahfidz', nilai: 88 },
+                { mapel: 'Bahasa Arab Pilihan', nilai: 92 },
+                { mapel: 'Kimia', nilai: 82 },
+                { mapel: 'Sosiologi', nilai: 89 },
+                { mapel: 'Ekonomi', nilai: 88 },
+                { mapel: 'Jumlah', nilai: 1554 },
+                { mapel: 'Rata-rata', nilai: 86.3 },
+            ],
+            4: [
+                { mapel: 'Al Quran Hadis', nilai: 89 },
+                { mapel: 'Akidah Akhlak', nilai: 89 },
+                { mapel: 'Fikih', nilai: 85 },
+                { mapel: 'Sejarah Kebudayaan Islam', nilai: 85 },
+                { mapel: 'Bahasa Arab', nilai: 89 },
+                { mapel: 'Pendidikan Pancasila', nilai: 85 },
+                { mapel: 'Bahasa Indonesia', nilai: 90 },
+                { mapel: 'Matematika', nilai: 87 },
+                { mapel: 'Bahasa Inggris', nilai: 87 },
+                { mapel: 'PJOK', nilai: 85 },
+                { mapel: 'Sejarah', nilai: 84 },
+                { mapel: 'PKWU', nilai: 89 },
+                { mapel: 'Seni Budaya', nilai: 89 },
+                { mapel: 'Tahfidz', nilai: 90 },
+                { mapel: 'Bahasa Arab Pilihan', nilai: 92 },
+                { mapel: 'Kimia', nilai: 85 },
+                { mapel: 'Sosiologi', nilai: 91 },
+                { mapel: 'Ekonomi', nilai: 85 },
+                { mapel: 'Jumlah', nilai: 1576 },
+                { mapel: 'Rata-rata', nilai: 87.5 },
+            ],
+            5: [
+                { mapel: 'Al Quran Hadis', nilai: 0 },
+                { mapel: 'Akidah Akhlak', nilai: 0 },
+                { mapel: 'Fikih', nilai: 0 },
+                { mapel: 'Sejarah Kebudayaan Islam', nilai: 0 },
+                { mapel: 'Bahasa Arab', nilai: 0 },
+                { mapel: 'Pendidikan Pancasila', nilai: 0 },
+                { mapel: 'Bahasa Indonesia', nilai: 0 },
+                { mapel: 'Matematika', nilai: 0 },
+                { mapel: 'Bahasa Inggris', nilai: 0 },
+                { mapel: 'PJOK', nilai: 0 },
+                { mapel: 'Sejarah', nilai: 0 },
+                { mapel: 'PKWU', nilai: 0 },
+                { mapel: 'Seni Budaya', nilai: 0 },
+                { mapel: 'Tahfidz', nilai: 0 },
+                { mapel: 'Bahasa Arab Pilihan', nilai: 0 },
+                { mapel: 'Kimia', nilai: 0 },
+                { mapel: 'Sosiologi', nilai: 0 },
+                { mapel: 'Ekonomi', nilai: 0 },
+                { mapel: 'Jumlah', nilai: 0 },
+                { mapel: 'Rata-rata', nilai: 0 },
+
+            ],
+        };
+
+        const nilaiModal = document.getElementById("nilaiModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalBody = document.getElementById("modalBody");
+
+        const pdfModal = document.getElementById("pdfModal");
+        const pdfModalTitle = document.getElementById("pdfModalTitle");
+        const pdfContainer = document.getElementById("pdfContainer");
+
+
+        // Fungsi untuk menampilkan Modal Nilai
+        function showDetails(semester) {
+            const dataSemester = nilaiMataPelajaran[semester];
+
+            if (!dataSemester) {
+                alert('Data nilai untuk Semester ' + semester + ' belum tersedia.');
+                return;
+            }
+
+            modalTitle.textContent = 'Detail Nilai Semester ' + semester;
+
+            // Membuat tabel HTML secara dinamis
+            let tableHTML = '<table class="nilai-table">';
+            tableHTML += '<thead><tr><th>Mata Pelajaran</th><th>Nilai</th></tr></thead>';
+            tableHTML += '<tbody>';
+
+            dataSemester.forEach(item => {
+                tableHTML += `<tr><td>${item.mapel}</td><td>${item.nilai}</td></tr>`;
+            });
+
+            tableHTML += '</tbody></table>';
+
+            modalBody.innerHTML = tableHTML;
+            nilaiModal.style.display = "flex"; // Tampilkan modal nilai
+        }
+
+        // Fungsi untuk menampilkan Sertifikat PDF
+        function showCertificate(pdfFileName, title) {
+            pdfModalTitle.textContent = title;
+
+            // Menyiapkan konten untuk PDF viewer dan link mobile
+            pdfContainer.innerHTML = `
+                <embed src="${pdfFileName}" type="application/pdf" class="pdf-viewer">
+                <div class="pdf-link-mobile">
+                    <a href="${pdfFileName}" target="_blank" download>
+                        <i class="fas fa-download"></i> Unduh atau Lihat Sertifikat
+                    </a>
+                </div>
+            `;
+
+            pdfModal.style.display = "flex"; // Tampilkan modal PDF
+        }
+
+        // Fungsi yang dimodifikasi untuk menutup Modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Menutup modal jika user klik di luar area modal
+        window.onclick = function (event) {
+            if (event.target == nilaiModal) {
+                closeModal('nilaiModal');
+            }
+            if (event.target == pdfModal) {
+                closeModal('pdfModal');
+            }
+        }
+
+        // --- FUNGSI UNTUK MEMBUAT GRADIENT WARNA (Dibutuhkan oleh Chart.js) ---
+        function getGradient(chart, colorStart, colorEnd) {
+            const ctx = chart.ctx;
+            // Membuat gradien vertikal dari atas (y=0) ke bawah (y=400)
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+
+            gradient.addColorStop(0, colorStart); // Emas Transparan di atas
+            gradient.addColorStop(1, colorEnd);   // Biru Gelap Transparan di bawah
+
+            return gradient;
+        }
+
+        // --- LOGIKA CHART.JS DAN INITIALIZATION ---
+        window.addEventListener('load', function () {
+
+            // Data Rata-rata Nilai Anda (diambil dari data simulasi di skrip Anda)
+            // Nilai 0 untuk Sem 5 agar garis putus-putus
+            const rataRataNilai = [84.1, 85.0, 86.3, 87.5, 88.0];
+
+            const ctx = document.getElementById('nilaiChart');
+
+            if (ctx) {
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5'],
+                        datasets: [{
+                            label: 'Rata-rata Nilai Akademik',
+                            data: rataRataNilai,
+
+                            fill: true, // Aktifkan area untuk gradien
+                            tension: 0.4, // Garis melengkung
+
+                            borderColor: '#FFD700', // Emas
+                            borderWidth: 3,
+
+                            // Warna Area (Background Fill) - Menggunakan Gradien
+                            backgroundColor: function (context) {
+                                return getGradient(
+                                    context.chart,
+                                    'rgba(255, 215, 0, 0.4)',
+                                    'rgba(10, 25, 49, 0.0)'
+                                );
+                            },
+
+                            pointBackgroundColor: '#FFFFFF',
+                            pointBorderColor: '#FFD700',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            pointHitRadius: 10,
+                        }]
+                    },
+
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+
+                        // --- PERBAIKAN 1: MENAMBAHKAN PADDING LAYOUT ---
+                        layout: {
+                            padding: {
+                                top: 25,
+                                bottom: 85, // Untuk mencegah label terpotong di bawah
+                                left: 0,   // KRITIS: Untuk memasukkan "Sem 1" ke dalam kolom
+                                right: 0   // Untuk memastikan "Sem 5" juga masuk
+                            }
+                        },
+
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: 80,
+                                max: 90, // Nilai Max yang Anda inginkan
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)',
+                                    borderColor: '#1C2E4A'
+                                },
+                                ticks: {
+                                    stepSize: 1, // Memadatkan jarak label
+                                    color: '#EAEAEA'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: '#EAEAEA'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: true,
+                                labels: {
+                                    color: '#EAEAEA',
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(28, 46, 74, 0.9)',
+                                titleColor: '#FFD700',
+                                bodyColor: '#EAEAEA',
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        // --- Logika Perhitungan Rata-rata Global (Dipindahkan ke bawah Chart.js agar tidak error jika dijalankan duluan) ---
+        const semesterData = [
+            { sem: 1, avg: 84.1 },
+            { sem: 2, avg: 85.0 },
+            { sem: 3, avg: 86.3 },
+            { sem: 4, avg: 87.5 },
+            { sem: 5, avg: 88.0 }
+        ];
+        const totalAvg = semesterData.reduce((sum, data) => sum + data.avg, 0);
+        const globalIP = (totalAvg / semesterData.length).toFixed(2);
+
+    </script>
+</body>
+
+</html>
